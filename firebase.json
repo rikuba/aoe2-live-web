@@ -3,8 +3,17 @@
     "source": "packages/functions",
     "runtime": "nodejs12",
     "predeploy": [
-      "yarn workspace functions clean",
-      "yarn workspace functions build"
+      "yarn workspace @aoe2-live/functions clean",
+      "yarn workspace @aoe2-live/functions build"
+    ]
+  },
+  "hosting": {
+    "public": "public",
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "onRequest"
+      }
     ]
   }
 }
