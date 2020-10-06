@@ -1,0 +1,15 @@
+{
+  "name": "functions",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist/"
+  },
+  "dependencies": {
+    "firebase-admin": "^9.2.0",
+    "firebase-functions": "^3.11.0"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "source": "packages/functions",
+    "runtime": "nodejs12",
+    "predeploy": [
+      "yarn workspace functions clean",
+      "yarn workspace functions build"
+    ]
+  }
+}
