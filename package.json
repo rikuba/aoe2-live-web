@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "predeploy": "lerna run predeploy",
+    "predeploy": "lerna run predeploy --parallel",
     "deploy": "firebase deploy",
     "dev": "lerna run dev --parallel",
     "serve": "firebase serve"
