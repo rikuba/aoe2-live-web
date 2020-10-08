@@ -63,7 +63,7 @@ api.get(
       buffer = await sharp(buffer).resize(32, 32).toBuffer();
     }
     res.setHeader('Cache-Control', `public, max-age=${60 * 60 * 24 * 7}`);
-    res.setHeader('Content-Type', type?.mime ?? 'image/vnd.microsoft.icon');
+    res.setHeader('Content-Type', type?.mime ?? 'image/x-icon');
     res.send(buffer);
   })
 );
