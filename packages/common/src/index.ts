@@ -1,3 +1,3 @@
-export * as broadcast from './broadcast';
-export * as channel from './channel';
-export * as site from './site';
+export * from './broadcast';
+export * from './channel';
+export * from './site';

@@ -6,10 +6,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run build",
+    "predeploy": "lerna run predeploy",
     "deploy": "firebase deploy",
-    "serve": "firebase serve",
-    "start": "run-s build serve"
+    "dev": "lerna run dev --parallel",
+    "serve": "firebase serve"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.3.0",
@@ -23,7 +23,10 @@
     "npm-run-all": "^4.1.5",
     "prettier": "2.1.2",
     "rimraf": "^3.0.2",
-    "typescript": "^4.0.3"
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
   },
   "husky": {
     "hooks": {
