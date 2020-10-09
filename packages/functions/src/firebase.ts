@@ -1,9 +1,9 @@
 import {
+  Channel,
   EndedBroadcast,
   LiveBroadcast,
   UpcomingBroadcast,
 } from '@aoe2-live/common';
-import { Channel } from '@aoe2-live/common';
 import * as admin from 'firebase-admin';
 
 const firebase = admin.apps.length > 0 ? admin.app() : admin.initializeApp();
