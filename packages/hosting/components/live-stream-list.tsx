@@ -57,7 +57,7 @@ function LiveStream({ streamGroup, timeStamp }: LiveStreamProps) {
             {streamGroup.userId}
           </ExternalLink>
 
-          {streamGroup.totalViewers && (
+          {streamGroup.totalViewers > 0 && (
             <span className="ml-1">({streamGroup.totalViewers}人)</span>
           )}
 
