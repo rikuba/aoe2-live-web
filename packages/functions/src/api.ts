@@ -1,3 +1,4 @@
+import { groupStreamsByUser } from '@aoe2-live/common';
 import { RequestHandler, Router } from 'express';
 import { takeChannels, takeEndedStreams, takeStreams } from './firebase';
 
@@ -22,10 +23,14 @@ api.get(
 );
 
 api.get(
-  '/live-streams',
+  '/live-stream-groups',
   handler(async (req, res) => {
+    const streams = await takeStreams({ status: 'live' });
+    const group = groupStreamsByUser(streams).sort(
+      (a, b) => b.totalViewers - a.totalViewers
+    );
     res.setHeader('Cache-Control', `public, s-maxage=60`);
-    res.json(await takeStreams({ status: 'live' }));
+    res.json(group);
   })
 );
 
@@ -40,7 +45,7 @@ api.get(
 api.get(
   '/ended-streams',
   handler(async (req, res) => {
-    res.setHeader('Cache-Control', `public, s-maxage=60`);
+    res.setHeader('Cache-Control', `public, s-maxage=${60 * 60}`);
     res.json(await takeEndedStreams());
   })
 );

@@ -4,7 +4,8 @@
     "runtime": "nodejs12"
   },
   "hosting": {
-    "public": "public",
+    "public": "packages/hosting/out",
+    "cleanUrls": true,
     "rewrites": [
       {
         "source": "/api/**",

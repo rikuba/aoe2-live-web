@@ -42,7 +42,7 @@ export async function takeStreams<T extends 'live' | 'upcoming'>({
 }
 
 export async function takeEndedStreams({
-  limit = 10,
+  limit = 15,
 }: {
   limit?: number;
 } = {}) {

@@ -3,10 +3,13 @@ import { SiteId } from './site';
 export type Channel = {
   channelId: string;
   site: SiteId;
-  userId: string;
+  userId?: string;
 };
 
-export function getChannelUrl(channel: Channel): string {
+export function getChannelUrl(channel: {
+  channelId: string;
+  site: SiteId;
+}): string {
   switch (channel.site) {
     case 'kukulu':
       return `https://live.erinn.biz/userdata.php?uid://${channel.channelId}/`;
