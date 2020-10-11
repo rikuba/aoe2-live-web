@@ -1,24 +1,17 @@
 import { getSiteName, StreamGroup } from '@aoe2-live/common';
-import { useEffect } from 'react';
-import useSWR from 'swr';
 import * as api from '../api';
 import { formatDuration } from '../util';
 import { ExternalLink } from './external-link';
 
 type LiveStreamListProps = {
+  streamGroups: StreamGroup[] | undefined;
   timeStamp: number;
 };
 
-export function LiveStreamList({ timeStamp }: LiveStreamListProps) {
-  const { data: streamGroups } = useSWR<StreamGroup[]>(
-    '/api/live-stream-groups'
-  );
-
-  const liveCount = streamGroups?.length ?? 0;
-  useEffect(() => {
-    document.title = `(${liveCount}) AoE2 Live`;
-  }, [liveCount]);
-
+export function LiveStreamList({
+  streamGroups,
+  timeStamp,
+}: LiveStreamListProps) {
   return (
     <section className="section2">
       <h2 className="heading2">放送中の配信一覧</h2>
