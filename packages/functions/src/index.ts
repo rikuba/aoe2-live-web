@@ -1,6 +1,6 @@
 import { Broadcast } from '@aoe2-live/common';
 import * as functions from 'firebase-functions';
-import * as https from 'https';
+import fetch from 'node-fetch';
 import { app } from './app';
 
 export const onRequest = functions.https.onRequest(app);
@@ -9,7 +9,7 @@ export const onChannelChange = functions
   .region('asia-northeast1')
   .firestore.document('channels/{channelId}')
   .onWrite(async () => {
-    await sendPurgeRequest('https://aoe2.live/api/channels');
+    await fetch('https://aoe2.live/api/channels', { method: 'PURGE' });
   });
 
 export const onStreamEnd = functions
@@ -18,14 +18,6 @@ export const onStreamEnd = functions
   .onUpdate(async (change) => {
     const stream = change.after.data() as Broadcast;
     if (stream.status === 'ended') {
-      await sendPurgeRequest('https://aoe2.live/api/ended-streams');
+      await fetch('https://aoe2.live/api/ended-streams', { method: 'PURGE' });
     }
   });
-
-async function sendPurgeRequest(url: string) {
-  return new Promise((resolve, reject) => {
-    const req = https.request(url, resolve);
-    req.on('error', reject);
-    req.end();
-  });
-}
