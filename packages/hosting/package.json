@@ -6,7 +6,8 @@
     "build": "next build",
     "clean": "rimraf .next/ out/",
     "export": "next export",
-    "predeploy": "run-s clean build export"
+    "predeploy": "run-s clean build export",
+    "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
     "next": "9.5.4",
