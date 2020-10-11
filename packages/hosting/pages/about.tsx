@@ -37,7 +37,7 @@ export default function About({ channels }: AboutProps) {
             </li>
             <li>
               掲示板:{' '}
-              <ExternalLink href="http://jbbs.shitaraba.net/bbs/read.cgi/netgame/10071/1393777787/l50">
+              <ExternalLink href="http://jbbs.shitaraba.net/bbs/read.cgi/netgame/10071/1393777787/133n-">
                 AOC Streams ご意見板(´ﾟωﾟ`)ﾅｯﾂｴﾚｶﾞﾝﾄ
               </ExternalLink>
             </li>
