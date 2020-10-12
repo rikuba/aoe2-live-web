@@ -54,7 +54,7 @@ function LiveStream({ streamGroup, timeStamp }: LiveStreamProps) {
       <div className="flex-1">
         <div>
           <ExternalLink href={stream.url} className="font-bold">
-            {streamGroup.userId}
+            {streamGroup.userId ?? stream.channelName}
           </ExternalLink>
 
           {streamGroup.totalViewers > 0 && (

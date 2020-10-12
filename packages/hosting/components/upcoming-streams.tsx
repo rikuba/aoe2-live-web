@@ -50,7 +50,7 @@ function UpcomingStream({ timeStamp, ...stream }: UpcomingStreamProps) {
       <div className="flex-1">
         <div>
           <ExternalLink href={stream.url} className="font-bold">
-            {stream.userId}
+            {stream.userId ?? stream.channelName}
           </ExternalLink>
           <div className="inline-block text-sm text-gray-800">
             <ExternalLink href={stream.url} className="ml-2">
