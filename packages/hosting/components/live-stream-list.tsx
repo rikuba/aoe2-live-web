@@ -76,7 +76,7 @@ function LiveStream({ streamGroup, timeStamp }: LiveStreamProps) {
                 />
                 {stream.channelName}
               </ExternalLink>
-              {streams.length > 1 && (
+              {streams.length > 1 && (stream.viewers ?? 0) > 0 && (
                 <span className="ml-1">({stream.viewers}人)</span>
               )}
             </div>
