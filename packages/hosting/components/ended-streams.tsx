@@ -7,11 +7,12 @@ import {
 import { favicon } from '../api';
 import { formatDateTime, formatDuration } from '../util';
 import { ExternalLink } from './external-link';
-import useSWR from 'swr';
 
-export function EndedStreamList() {
-  const { data: streams } = useSWR<EndedBroadcast[]>('/api/ended-streams');
+type EndedStreamListProps = {
+  streams: EndedBroadcast[] | void;
+};
 
+export function EndedStreamList({ streams }: EndedStreamListProps) {
   if (!streams || streams.length === 0) {
     return null;
   }

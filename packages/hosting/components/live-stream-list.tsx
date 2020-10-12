@@ -4,14 +4,11 @@ import { formatDuration } from '../util';
 import { ExternalLink } from './external-link';
 
 type LiveStreamListProps = {
-  streamGroups: StreamGroup[] | undefined;
-  timeStamp: number;
+  streamGroups: StreamGroup[] | void;
+  now: number;
 };
 
-export function LiveStreamList({
-  streamGroups,
-  timeStamp,
-}: LiveStreamListProps) {
+export function LiveStreamList({ streamGroups, now }: LiveStreamListProps) {
   return (
     <section className="section2">
       <h2 className="heading2">放送中の配信一覧</h2>
@@ -21,11 +18,7 @@ export function LiveStreamList({
         <p>現在放送中の配信はありません。</p>
       ) : (
         streamGroups.map((group) => (
-          <LiveStream
-            key={group.userId}
-            streamGroup={group}
-            timeStamp={timeStamp}
-          />
+          <LiveStream key={group.userId} streamGroup={group} now={now} />
         ))
       )}
     </section>
@@ -34,10 +27,10 @@ export function LiveStreamList({
 
 type LiveStreamProps = {
   streamGroup: StreamGroup;
-  timeStamp: number;
+  now: number;
 };
 
-function LiveStream({ streamGroup, timeStamp }: LiveStreamProps) {
+function LiveStream({ streamGroup, now }: LiveStreamProps) {
   const stream = streamGroup.streams[0];
 
   return (
@@ -88,7 +81,7 @@ function LiveStream({ streamGroup, timeStamp }: LiveStreamProps) {
           <span>{stream.title}</span>
         </div>
 
-        <div>{formatDuration(timeStamp - stream.startTime)}</div>
+        <div>{formatDuration(now - stream.startTime)}</div>
       </div>
     </div>
   );

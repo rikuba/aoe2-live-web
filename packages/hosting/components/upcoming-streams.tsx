@@ -2,17 +2,13 @@ import { getSiteName, UpcomingBroadcast } from '@aoe2-live/common';
 import * as api from '../api';
 import { formatDateTime, formatDuration } from '../util';
 import { ExternalLink } from './external-link';
-import useSWR from 'swr';
 
 type UpcomingStreamListProps = {
-  timeStamp: number;
+  streams: UpcomingBroadcast[] | void;
+  now: number;
 };
 
-export function UpcomingStreamList({ timeStamp }: UpcomingStreamListProps) {
-  const { data: streams } = useSWR<UpcomingBroadcast[]>(
-    '/api/upcoming-streams'
-  );
-
+export function UpcomingStreamList({ streams, now }: UpcomingStreamListProps) {
   if (!streams || streams.length === 0) {
     return null;
   }
@@ -21,21 +17,17 @@ export function UpcomingStreamList({ timeStamp }: UpcomingStreamListProps) {
     <section className="section2">
       <h2 className="heading2">放送予定</h2>
       {streams.map((stream) => (
-        <UpcomingStream
-          key={stream.streamId}
-          {...stream}
-          timeStamp={timeStamp}
-        />
+        <UpcomingStream key={stream.streamId} {...stream} now={now} />
       ))}
     </section>
   );
 }
 
 type UpcomingStreamProps = UpcomingBroadcast & {
-  timeStamp: number;
+  now: number;
 };
 
-function UpcomingStream({ timeStamp, ...stream }: UpcomingStreamProps) {
+function UpcomingStream({ now, ...stream }: UpcomingStreamProps) {
   return (
     <div className="flex mt-4">
       <ExternalLink href={stream.url}>
@@ -73,7 +65,7 @@ function UpcomingStream({ timeStamp, ...stream }: UpcomingStreamProps) {
 
         <div>
           {`${formatDateTime(stream.startTime)}開始`}
-          {` (あと${formatDuration(stream.startTime - timeStamp)})`}
+          {` (あと${formatDuration(stream.startTime - now)})`}
         </div>
       </div>
     </div>
