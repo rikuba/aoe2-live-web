@@ -28,6 +28,10 @@ type UpcomingStreamProps = UpcomingBroadcast & {
 };
 
 function UpcomingStream({ now, ...stream }: UpcomingStreamProps) {
+  const timeLeft = stream.startTime - now;
+  const timeLeftString =
+    timeLeft <= 60 * 1000 ? '間もなく開始' : `あと${formatDuration(timeLeft)}`;
+
   return (
     <div className="flex flex-col sm:flex-row mt-4">
       <ExternalLink href={stream.url}>
@@ -65,7 +69,7 @@ function UpcomingStream({ now, ...stream }: UpcomingStreamProps) {
 
         <div>
           {`${formatDateTime(stream.startTime)}開始`}
-          {` (あと${formatDuration(stream.startTime - now)})`}
+          {` (${timeLeftString})`}
         </div>
       </div>
     </div>
