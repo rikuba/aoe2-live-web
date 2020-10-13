@@ -1,19 +1,26 @@
 import { getSiteName, StreamGroup } from '@aoe2-live/common';
+import useSWR from 'swr';
 import * as api from '../api';
 import { formatDuration } from '../util';
 import { ExternalLink } from './external-link';
 
 type LiveStreamListProps = {
-  streamGroups: StreamGroup[] | void;
   now: number;
 };
 
-export function LiveStreamList({ streamGroups, now }: LiveStreamListProps) {
+export function LiveStreamList({ now }: LiveStreamListProps) {
+  const { data: streamGroups, error } = useSWR<StreamGroup[]>(
+    '/api/live-stream-groups',
+    { refreshInterval: 60_000, refreshWhenHidden: true }
+  );
+
   return (
     <section className="section2">
       <h2 className="heading2">放送中の配信一覧</h2>
-      {!streamGroups ? (
-        <p>配信情報を取得中...</p>
+      {error ? (
+        <p>取得できませんでした。</p>
+      ) : !streamGroups ? (
+        <p>取得中...</p>
       ) : streamGroups.length === 0 ? (
         <p>現在放送中の配信はありません。</p>
       ) : (

@@ -1,15 +1,20 @@
 import { getSiteName, UpcomingBroadcast } from '@aoe2-live/common';
+import useSWR from 'swr';
 import * as api from '../api';
 import { formatDateTime, formatDuration } from '../util';
 import { ExternalLink } from './external-link';
 
 type UpcomingStreamListProps = {
-  streams: UpcomingBroadcast[] | void;
   now: number;
 };
 
-export function UpcomingStreamList({ streams, now }: UpcomingStreamListProps) {
-  if (!streams || streams.length === 0) {
+export function UpcomingStreamList({ now }: UpcomingStreamListProps) {
+  const { data: streams, error } = useSWR<UpcomingBroadcast[]>(
+    '/api/upcoming-streams',
+    { refreshInterval: 30 * 60_000 }
+  );
+
+  if (error || !streams || streams.length === 0) {
     return null;
   }
 

@@ -4,25 +4,29 @@ import {
   getSiteName,
   getVideoUrl,
 } from '@aoe2-live/common';
+import useSWR from 'swr';
 import { favicon } from '../api';
 import { formatDateTime, formatDuration } from '../util';
 import { ExternalLink } from './external-link';
 
-type EndedStreamListProps = {
-  streams: EndedBroadcast[] | void;
-};
-
-export function EndedStreamList({ streams }: EndedStreamListProps) {
-  if (!streams || streams.length === 0) {
-    return null;
-  }
+export function EndedStreamList() {
+  const { data: streams, error } = useSWR<EndedBroadcast[]>(
+    '/api/ended-streams',
+    { refreshInterval: 2 * 60_000 }
+  );
 
   return (
     <section className="section2">
       <h2 className="heading2">過去の配信一覧</h2>
-      {streams.map((stream) => (
-        <EndedStream key={stream.streamId} {...stream} />
-      ))}
+      {error ? (
+        <p>取得できませんでした。</p>
+      ) : !streams ? (
+        <p>取得中...</p>
+      ) : (
+        streams.map((stream) => (
+          <EndedStream key={stream.streamId} {...stream} />
+        ))
+      )}
     </section>
   );
 }
