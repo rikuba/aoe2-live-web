@@ -29,7 +29,7 @@ type UpcomingStreamProps = UpcomingBroadcast & {
 
 function UpcomingStream({ now, ...stream }: UpcomingStreamProps) {
   return (
-    <div className="flex mt-4">
+    <div className="flex flex-col sm:flex-row mt-4">
       <ExternalLink href={stream.url}>
         <img
           src={stream.thumbnail}
