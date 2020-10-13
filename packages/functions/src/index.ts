@@ -5,19 +5,23 @@ import { app } from './app';
 
 export const onRequest = functions.https.onRequest(app);
 
+const purge = (url: string) => fetch(url, { method: 'PURGE' });
+
 export const onChannelChange = functions
   .region('asia-northeast1')
   .firestore.document('channels/{channelId}')
   .onWrite(async () => {
-    await fetch('https://aoe2.live/api/channels', { method: 'PURGE' });
+    await purge('https://aoe2.live/api/channels');
   });
 
-export const onStreamEnd = functions
+export const onStreamChange = functions
   .region('asia-northeast1')
   .firestore.document('streams/{streamId}')
   .onUpdate(async (change) => {
-    const stream = change.after.data() as Broadcast;
-    if (stream.status === 'ended') {
-      await fetch('https://aoe2.live/api/ended-streams', { method: 'PURGE' });
+    const after = change.after.data() as Broadcast;
+    if (after.status === 'ended') {
+      await purge('https://aoe2.live/api/ended-streams');
+    } else if (after.status === 'upcoming') {
+      await purge('https://aoe2.live/api/upcoming-streams');
     }
   });
