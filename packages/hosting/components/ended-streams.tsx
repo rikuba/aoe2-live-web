@@ -62,7 +62,7 @@ function EndedStream(stream: EndedStreamProps) {
         ({formatDuration(stream.endTime - stream.startTime)})
       </span>
 
-      {stream.maxViewers && (
+      {(stream.maxViewers ?? 0) > 0 && (
         <span className="ml-1">({stream.maxViewers}人)</span>
       )}
     </div>
