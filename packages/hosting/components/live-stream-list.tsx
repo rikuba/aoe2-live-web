@@ -50,12 +50,15 @@ function LiveStream({ streamGroup, now }: LiveStreamProps) {
 
   return (
     <div className="flex flex-col sm:flex-row mt-4">
-      <ExternalLink href={stream.url}>
+      <ExternalLink
+        href={stream.url}
+        className="mb-1 sm:mr-3 w-full sm:w-thumbnail"
+      >
         <img
           src={stream.thumbnail}
           width="192"
           height="108"
-          className="thumbnail mr-3 bg-gray-600"
+          className="bg-gray-600 w-full"
           onError={handlerImgError}
         />
       </ExternalLink>
