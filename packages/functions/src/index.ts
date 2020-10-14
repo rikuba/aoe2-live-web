@@ -18,10 +18,11 @@ export const onStreamChange = functions
   .region('asia-northeast1')
   .firestore.document('streams/{streamId}')
   .onUpdate(async (change) => {
+    const before = change.before.data() as Broadcast;
     const after = change.after.data() as Broadcast;
     if (after.status === 'ended') {
       await purge('https://aoe2.live/api/ended-streams');
-    } else if (after.status === 'upcoming') {
+    } else if (before.status === 'upcoming' || after.status === 'upcoming') {
       await purge('https://aoe2.live/api/upcoming-streams');
     }
   });

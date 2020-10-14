@@ -11,7 +11,7 @@ type UpcomingStreamListProps = {
 export function UpcomingStreamList({ now }: UpcomingStreamListProps) {
   const { data: streams, error } = useSWR<UpcomingBroadcast[]>(
     '/api/upcoming-streams',
-    { refreshInterval: 30 * 60_000 }
+    { refreshInterval: 5 * 60_000 }
   );
 
   if (error || !streams || streams.length === 0) {
