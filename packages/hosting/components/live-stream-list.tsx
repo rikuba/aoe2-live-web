@@ -40,6 +40,14 @@ type LiveStreamProps = {
 function LiveStream({ streamGroup, now }: LiveStreamProps) {
   const stream = streamGroup.streams[0];
 
+  const transparent =
+    'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+  const handlerImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    if (e.currentTarget.src !== transparent) {
+      e.currentTarget.src = transparent;
+    }
+  };
+
   return (
     <div className="flex flex-col sm:flex-row mt-4">
       <ExternalLink href={stream.url}>
@@ -47,7 +55,8 @@ function LiveStream({ streamGroup, now }: LiveStreamProps) {
           src={stream.thumbnail}
           width="192"
           height="108"
-          className="thumbnail mr-3"
+          className="thumbnail mr-3 bg-gray-600"
+          onError={handlerImgError}
         />
       </ExternalLink>
 
