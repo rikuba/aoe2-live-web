@@ -35,13 +35,17 @@
     font-weight: 700;
   }
 
-  .columns {
-    columns: 15rem;
-  }
-
   @responsive {
     .w-thumbnail {
       width: 192px;
+    }
+
+    .column-2 {
+      column-count: 2;
+    }
+
+    .column-3 {
+      column-count: 3;
     }
   }
 }

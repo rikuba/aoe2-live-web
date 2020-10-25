@@ -76,7 +76,7 @@ function ChannelList({ site, channels }: ChannelListProps) {
         {siteName}
       </h4>
 
-      <ul className="list-disc pl-4 my-4 columns">
+      <ul className="list-disc pl-4 my-4 md:column-2 lg:column-3">
         {siteChannels.map((channel) => {
           const url = getChannelUrl(channel);
           return (
