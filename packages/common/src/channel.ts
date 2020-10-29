@@ -3,7 +3,7 @@ import { SiteId } from './site';
 export type Channel = {
   channelId: string;
   site: SiteId;
-  userId?: string;
+  userId: string;
 };
 
 export function getChannelUrl(channel: {
