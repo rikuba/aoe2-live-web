@@ -1,14 +1,11 @@
 import { getSiteName, UpcomingBroadcast } from '@aoe2-live/common';
 import useSWR from 'swr';
 import * as api from '../api';
+import { TimeStampContext } from '../states';
 import { formatDateTime, formatDuration } from '../util';
 import { ExternalLink } from './external-link';
 
-type UpcomingStreamListProps = {
-  now: number;
-};
-
-export function UpcomingStreamList({ now }: UpcomingStreamListProps) {
+export function UpcomingStreamList() {
   const { data: streams, error } = useSWR<UpcomingBroadcast[]>(
     '/api/upcoming-streams',
     { refreshInterval: 5 * 60_000 }
@@ -19,21 +16,29 @@ export function UpcomingStreamList({ now }: UpcomingStreamListProps) {
   }
 
   return (
-    <section className="section2">
-      <h2 className="heading2">放送予定</h2>
-      {streams.map((stream) => (
-        <UpcomingStream key={stream.streamId} {...stream} now={now} />
-      ))}
-    </section>
+    <TimeStampContext.Consumer>
+      {(timeStamp) => (
+        <section className="section2">
+          <h2 className="heading2">放送予定</h2>
+          {streams.map((stream) => (
+            <UpcomingStream
+              key={stream.streamId}
+              {...stream}
+              timeStamp={timeStamp}
+            />
+          ))}
+        </section>
+      )}
+    </TimeStampContext.Consumer>
   );
 }
 
 type UpcomingStreamProps = UpcomingBroadcast & {
-  now: number;
+  timeStamp: number;
 };
 
-function UpcomingStream({ now, ...stream }: UpcomingStreamProps) {
-  const timeLeft = stream.startTime - now;
+function UpcomingStream({ timeStamp, ...stream }: UpcomingStreamProps) {
+  const timeLeft = stream.startTime - timeStamp;
   const timeLeftString =
     timeLeft <= 60 * 1000 ? '間もなく開始' : `あと${formatDuration(timeLeft)}`;
 

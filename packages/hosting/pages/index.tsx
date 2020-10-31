@@ -5,10 +5,10 @@ import { EndedStreamList } from '../components/ended-streams';
 import { Layout } from '../components/layout';
 import { LiveStreamList } from '../components/live-stream-list';
 import { UpcomingStreamList } from '../components/upcoming-streams';
-import { useTimeStamp } from '../states';
+import { TimeStampContext, useTimeStamp } from '../states';
 
 export default function Home() {
-  const now = useTimeStamp(60_000);
+  const timeStamp = useTimeStamp(60_000);
 
   const { data: streamGroups } = useSWR<StreamGroup[]>(
     '/api/live-stream-groups',
@@ -24,12 +24,14 @@ export default function Home() {
   return (
     <SWRConfig value={{ dedupingInterval: 60_000 }}>
       <Layout>
-        <Head>
-          <title>{title}</title>
-        </Head>
-        <LiveStreamList now={now} />
-        <UpcomingStreamList now={now} />
-        <EndedStreamList />
+        <TimeStampContext.Provider value={timeStamp}>
+          <Head>
+            <title>{title}</title>
+          </Head>
+          <LiveStreamList />
+          <UpcomingStreamList />
+          <EndedStreamList />
+        </TimeStampContext.Provider>
       </Layout>
     </SWRConfig>
   );

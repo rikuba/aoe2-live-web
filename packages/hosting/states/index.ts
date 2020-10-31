@@ -1,4 +1,6 @@
-import { DependencyList, useEffect, useState } from 'react';
+import { createContext, DependencyList, useEffect, useState } from 'react';
+
+export const TimeStampContext = createContext(0);
 
 /**
  * @param interval milliseconds
