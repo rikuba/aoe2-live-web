@@ -1,4 +1,5 @@
 import { getSiteName, StreamGroup } from '@aoe2-live/common';
+import Head from 'next/head';
 import useSWR from 'swr';
 import * as api from '../api';
 import { TimeStampContext } from '../states';
@@ -11,10 +12,19 @@ export function LiveStreamList() {
     { refreshInterval: 60_000, refreshWhenHidden: true }
   );
 
+  const liveCount = streamGroups?.length ?? 0;
+  let title = 'AoE2 Live';
+  if (liveCount > 0) {
+    title = `(${liveCount}) ${title}`;
+  }
+
   return (
     <TimeStampContext.Consumer>
       {(timeStamp) => (
         <section className="section2">
+          <Head>
+            <title>{title}</title>
+          </Head>
           <h2 className="heading2">放送中の配信一覧</h2>
           {error ? (
             <p>取得できませんでした。</p>
