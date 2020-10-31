@@ -1,8 +1,9 @@
 import { Channel, getChannelUrl, getSiteName, SiteId } from '@aoe2-live/common';
 import { GetStaticProps } from 'next';
+import Head from 'next/head';
+import * as api from '../api';
 import { ExternalLink } from '../components/external-link';
 import { Layout } from '../components/layout';
-import * as api from '../api';
 
 type AboutProps = {
   channels: Channel[];
@@ -12,7 +13,11 @@ export default function About({ channels }: AboutProps) {
   const sites: SiteId[] = ['kukulu', 'mildom', 'openrec', 'twitch', 'youtube'];
 
   return (
-    <Layout title="AoE2 Live について">
+    <Layout>
+      <Head>
+        <title>AoE2 Live について</title>
+      </Head>
+
       <section className="section2">
         <h2 className="heading2">AoE2 Live について</h2>
         <p className="py-4">

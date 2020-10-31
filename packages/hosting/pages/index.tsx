@@ -1,4 +1,5 @@
 import { StreamGroup } from '@aoe2-live/common';
+import Head from 'next/head';
 import useSWR, { SWRConfig } from 'swr';
 import { EndedStreamList } from '../components/ended-streams';
 import { Layout } from '../components/layout';
@@ -22,7 +23,10 @@ export default function Home() {
 
   return (
     <SWRConfig value={{ dedupingInterval: 60_000 }}>
-      <Layout title={title}>
+      <Layout>
+        <Head>
+          <title>{title}</title>
+        </Head>
         <LiveStreamList now={now} />
         <UpcomingStreamList now={now} />
         <EndedStreamList />
