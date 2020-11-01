@@ -1,21 +1,33 @@
-import { getSiteName, StreamGroup } from '@aoe2-live/common';
-import useSWR from 'swr';
+import {
+  getSiteName,
+  groupStreamsByUser,
+  StreamGroup,
+} from '@aoe2-live/common';
+import Head from 'next/head';
 import * as api from '../api';
+import { TimeStampContext, useLiveStreams } from '../states';
 import { formatDuration } from '../util';
 import { ExternalLink } from './external-link';
 
-type LiveStreamListProps = {
-  now: number;
-};
+export function LiveStreamList() {
+  const { streams, error } = useLiveStreams();
+  const streamGroups = streams
+    ? groupStreamsByUser(streams).sort(
+        (a, b) => b.totalViewers - a.totalViewers
+      )
+    : undefined;
 
-export function LiveStreamList({ now }: LiveStreamListProps) {
-  const { data: streamGroups, error } = useSWR<StreamGroup[]>(
-    '/api/live-stream-groups',
-    { refreshInterval: 60_000, refreshWhenHidden: true }
-  );
+  const liveCount = streamGroups?.length ?? 0;
+  let title = 'AoE2 Live';
+  if (liveCount > 0) {
+    title = `(${liveCount}) ${title}`;
+  }
 
   return (
     <section className="section2">
+      <Head>
+        <title>{title}</title>
+      </Head>
       <h2 className="heading2">放送中の配信一覧</h2>
       {error ? (
         <p>取得できませんでした。</p>
@@ -25,7 +37,7 @@ export function LiveStreamList({ now }: LiveStreamListProps) {
         <p>現在放送中の配信はありません。</p>
       ) : (
         streamGroups.map((group) => (
-          <LiveStream key={group.userId} streamGroup={group} now={now} />
+          <LiveStream key={group.userId} streamGroup={group} />
         ))
       )}
     </section>
@@ -34,10 +46,9 @@ export function LiveStreamList({ now }: LiveStreamListProps) {
 
 type LiveStreamProps = {
   streamGroup: StreamGroup;
-  now: number;
 };
 
-function LiveStream({ streamGroup, now }: LiveStreamProps) {
+function LiveStream({ streamGroup }: LiveStreamProps) {
   const stream = streamGroup.streams[0];
 
   const transparent =
@@ -100,8 +111,20 @@ function LiveStream({ streamGroup, now }: LiveStreamProps) {
           <span>{stream.title}</span>
         </div>
 
-        <div>{formatDuration(now - stream.startTime)}</div>
+        <LiveDuration startTime={stream.startTime} />
       </div>
     </div>
+  );
+}
+
+type LiveDurationProps = {
+  startTime: number;
+};
+
+function LiveDuration({ startTime }: LiveDurationProps) {
+  return (
+    <TimeStampContext.Consumer>
+      {(timeStamp) => <p>{formatDuration(timeStamp - startTime)}</p>}
+    </TimeStampContext.Consumer>
   );
 }

@@ -4,16 +4,19 @@ import {
   getSiteName,
   getVideoUrl,
 } from '@aoe2-live/common';
-import useSWR from 'swr';
 import { favicon } from '../api';
+import { useEndedStreams } from '../states';
 import { formatDateTime, formatDuration } from '../util';
 import { ExternalLink } from './external-link';
 
 export function EndedStreamList() {
-  const { data: streams, error } = useSWR<EndedBroadcast[]>(
-    '/api/ended-streams',
-    { refreshInterval: 2 * 60_000 }
-  );
+  const { streams, error } = useEndedStreams();
+
+  if (process.env.NODE_ENV === 'development') {
+    if (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <section className="section2">

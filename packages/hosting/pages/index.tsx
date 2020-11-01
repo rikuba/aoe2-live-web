@@ -1,32 +1,23 @@
-import { StreamGroup } from '@aoe2-live/common';
-import useSWR, { SWRConfig } from 'swr';
+import Head from 'next/head';
 import { EndedStreamList } from '../components/ended-streams';
 import { Layout } from '../components/layout';
 import { LiveStreamList } from '../components/live-stream-list';
 import { UpcomingStreamList } from '../components/upcoming-streams';
-import { useTimeStamp } from '../states';
+import { TimeStampContext, useTimeStamp } from '../states';
 
 export default function Home() {
-  const now = useTimeStamp(60_000);
-
-  const { data: streamGroups } = useSWR<StreamGroup[]>(
-    '/api/live-stream-groups',
-    { refreshInterval: 60_000, refreshWhenHidden: true }
-  );
-
-  const liveCount = streamGroups?.length ?? 0;
-  let title = 'AoE2 Live';
-  if (liveCount > 0) {
-    title = `(${liveCount}) ${title}`;
-  }
+  const timeStamp = useTimeStamp(60_000);
 
   return (
-    <SWRConfig value={{ dedupingInterval: 60_000 }}>
-      <Layout title={title}>
-        <LiveStreamList now={now} />
-        <UpcomingStreamList now={now} />
+    <Layout>
+      <TimeStampContext.Provider value={timeStamp}>
+        <Head>
+          <title>AoE2 Live</title>
+        </Head>
+        <LiveStreamList />
+        <UpcomingStreamList />
         <EndedStreamList />
-      </Layout>
-    </SWRConfig>
+      </TimeStampContext.Provider>
+    </Layout>
   );
 }

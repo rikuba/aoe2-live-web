@@ -1,5 +1,4 @@
 import { useRouter } from 'next/dist/client/router';
-import Head from 'next/head';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 
@@ -8,19 +7,11 @@ const navItems = [
   ['About', '/about'],
 ];
 
-type LayoutProps = PropsWithChildren<{
-  title: string;
-}>;
+type LayoutProps = PropsWithChildren<unknown>;
 
-export function Layout({ children, title }: LayoutProps) {
+export function Layout({ children }: LayoutProps) {
   return (
     <section>
-      <Head>
-        <meta charSet="utf-8" />
-        <title>{title}</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <header className="bg-gray-900 text-white">
         <div className="container mx-auto px-6 flex items-center">
           <h1 className="flex-1 m-0 py-4 text-2xl font-bold">
