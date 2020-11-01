@@ -1,47 +1,37 @@
 import { getSiteName, UpcomingBroadcast } from '@aoe2-live/common';
-import useSWR from 'swr';
 import * as api from '../api';
-import { TimeStampContext } from '../states';
+import { TimeStampContext, useUpcomingStreams } from '../states';
 import { formatDateTime, formatDuration } from '../util';
 import { ExternalLink } from './external-link';
 
 export function UpcomingStreamList() {
-  const { data: streams, error } = useSWR<UpcomingBroadcast[]>(
-    '/api/upcoming-streams',
-    { refreshInterval: 5 * 60_000 }
-  );
+  const { streams, error } = useUpcomingStreams();
+
+  if (process.env.NODE_ENV === 'development') {
+    if (error) {
+      console.error(error);
+    }
+  }
 
   if (error || !streams || streams.length === 0) {
     return null;
   }
 
   return (
-    <TimeStampContext.Consumer>
-      {(timeStamp) => (
-        <section className="section2">
-          <h2 className="heading2">放送予定</h2>
-          {streams.map((stream) => (
-            <UpcomingStream
-              key={stream.streamId}
-              {...stream}
-              timeStamp={timeStamp}
-            />
-          ))}
-        </section>
-      )}
-    </TimeStampContext.Consumer>
+    <section className="section2">
+      <h2 className="heading2">放送予定</h2>
+      {streams.map((stream) => (
+        <UpcomingStream key={stream.streamId} stream={stream} />
+      ))}
+    </section>
   );
 }
 
-type UpcomingStreamProps = UpcomingBroadcast & {
-  timeStamp: number;
+type UpcomingStreamProps = {
+  stream: UpcomingBroadcast;
 };
 
-function UpcomingStream({ timeStamp, ...stream }: UpcomingStreamProps) {
-  const timeLeft = stream.startTime - timeStamp;
-  const timeLeftString =
-    timeLeft <= 60 * 1000 ? '間もなく開始' : `あと${formatDuration(timeLeft)}`;
-
+function UpcomingStream({ stream }: UpcomingStreamProps) {
   return (
     <div className="flex flex-col sm:flex-row mt-4">
       <ExternalLink
@@ -80,11 +70,32 @@ function UpcomingStream({ timeStamp, ...stream }: UpcomingStreamProps) {
           <span>{stream.title}</span>
         </div>
 
-        <div>
-          {`${formatDateTime(stream.startTime)}開始`}
-          {` (${timeLeftString})`}
-        </div>
+        <UpcomingDuration startTime={stream.startTime} />
       </div>
     </div>
+  );
+}
+
+type UpcomingDurationProps = {
+  startTime: number;
+};
+
+function UpcomingDuration({ startTime }: UpcomingDurationProps) {
+  return (
+    <TimeStampContext.Consumer>
+      {(timeStamp) => {
+        const timeLeft = startTime - timeStamp;
+        const timeLeftString =
+          timeLeft <= 60 * 1000
+            ? '間もなく開始'
+            : `あと${formatDuration(timeLeft)}`;
+        return (
+          <p>
+            {`${formatDateTime(startTime)}開始`}
+            {` (${timeLeftString})`}
+          </p>
+        );
+      }}
+    </TimeStampContext.Consumer>
   );
 }
